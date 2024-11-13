@@ -22,6 +22,7 @@ use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
 use Awcodes\LightSwitch\LightSwitchPlugin;
 use Awcodes\LightSwitch\Enums\Alignment;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -62,7 +63,14 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->plugins([
+            ->plugins([BreezyCore::make()
+                ->myProfile(
+                    shouldRegisterUserMenu: true, // Sets the 'account' link in the panel User Menu (default = true)
+                    shouldRegisterNavigation: false, // Adds a main navigation item for the My Profile page (default = false)
+                    navigationGroup: 'Settings', // Sets the navigation group for the My Profile page (default = null)
+                    hasAvatars: false, // Enables the avatar upload form component (default = false)
+                    slug: 'my-profile' // Sets the slug for the profile page (default = 'my-profile')
+                ),
                 FilamentProgressbarPlugin::make()->color('#dc2626'),
                 LightSwitchPlugin::make()
                     ->position(Alignment::TopRight)
@@ -76,6 +84,7 @@ class AdminPanelProvider extends PanelProvider
                 FilamentBackgroundsPlugin::make()
                     ->showAttribution(false)
                     ->remember(900),
+
             ])
             ->authMiddleware([
                 Authenticate::class,
