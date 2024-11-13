@@ -17,6 +17,11 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+// Add Plugins
+use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
+use Awcodes\LightSwitch\LightSwitchPlugin;
+use Awcodes\LightSwitch\Enums\Alignment;
+use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,6 +32,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration()
+            ->brandName('GestoRemesas')
             ->colors([
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
@@ -54,6 +61,21 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->plugins([
+                FilamentProgressbarPlugin::make()->color('#dc2626'),
+                LightSwitchPlugin::make()
+                    ->position(Alignment::TopRight)
+                    ->enabledOn([
+                        'auth.email',
+                        'auth.login',
+                        'auth.password',
+                        'auth.profile',
+                        'auth.register',
+                    ]),
+                FilamentBackgroundsPlugin::make()
+                    ->showAttribution(false)
+                    ->remember(900),
             ])
             ->authMiddleware([
                 Authenticate::class,
